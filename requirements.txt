@@ -1,0 +1,6 @@
+python-dotenv
+asyncpg
+aiogram
+sqlalchemy
+faker
+psycopg2
