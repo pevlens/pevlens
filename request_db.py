@@ -1,10 +1,11 @@
+from pytz import timezone
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.sql.sqltypes import Boolean
 from creare_model import User, Base
 from config import PG_USER, host, PG_PASS
 from sqlalchemy.exc import IntegrityError
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 
 
@@ -67,16 +68,20 @@ class DBComands():
 
     
     def time_update(self, chat_id) -> Boolean:
-        time_update_balance_last = self.session.query(User).filter_by(chat_id = chat_id).first()
+        
         time_now= datetime.now()
-        delta = time_now - time_update_balance_last.time_update
-        return str(delta) ,delta > timedelta(seconds=10)
+        delta  = time_now - timedelta(seconds= 10)
+        time_update_balance_last = self.session.query(User).filter_by(chat_id = chat_id).first()
+       
+        #delta_time_update_balance_last = time_update_balance_last.time_update
+        #delta = time_now - delta_time_update_balance_last str(delta) ,delta > timedelta(seconds=10)
+        return  time_update_balance_last.time_update, delta > time_update_balance_last.time_update
 
     
     def  set_moey_user (self, chat_id: int, sum: int) -> int:
         
         set_balance_user = self.session.query(User).filter_by(chat_id = chat_id).one()
-        if sum <=  set_balance_user.balance:
+        if sum <=  set_balance_user.balance and sum > 0:
             set_balance_user.balance -=  sum
             self.session.add(set_balance_user) 
             self.session.commit()
@@ -95,8 +100,8 @@ if __name__ == '__main__':
     #print(obj.add_new_user(543211, "ujin", "qwerty_pouj", 1234))
     #print(obj.view_balance_user(1234))
     #print(obj.count_referal_user(1234))
-    #print(obj.time_update(581018614))
-   
+    print(obj.time_update(581018614))
+    print(datetime.now(timezone.utc))
     #print(obj.update_balance_user(581018614, 100))
     
    

@@ -2,6 +2,7 @@ from sqlalchemy import Column, ForeignKey, Integer, String, Text, Date, DateTime
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql.expression import column
+from sqlalchemy.sql import func
 from datetime import datetime
 from config import PG_USER, host, PG_PASS
 
@@ -33,10 +34,10 @@ class User(Base):
     )
     reveral = Column(Integer)
     balance = Column(Integer, default=0)
-    time_update = Column(DateTime(), onupdate=datetime.now, default=datetime.now ,comment='Дата и обновления')
+    time_update = Column(DateTime(), onupdate=func.now() , server_default=func.now() ,comment='Дата и обновления')
 
     def __repr__(self):
-        return f'{self.chat_id} {self.username} {self.full_name} {self.reveral} {self.balance}'
+        return f'{self.chat_id} {self.username} {self.full_name} {self.reveral} {self.balance} {self.time_update}'
 
 
 

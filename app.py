@@ -35,7 +35,7 @@ async def get_free_money(message: types.Message):
         await bot.send_message(message.from_user.id, text = f"полученно 100  {date_base.view_balance_user(message.from_user.id)}")
 
     else:
-        await bot.send_message(message.from_user.id, text = f"Следующее получение через 10 секунд - прошло: {date_base.time_update(message.from_user.id)[0]}")
+        await bot.send_message(message.from_user.id, text = f"Следующее получение через 10 секунд. Последнее получение в: {date_base.time_update(message.from_user.id)[0]}")
 
 
 #@dp.message_handler(commands=["get_money"])
@@ -58,7 +58,7 @@ async def cash(message: types.Message, state: FSMContext):
         await message.answer(f"{a}")
      except ValueError:
 
-         await message.answer(f"вы ничего не ввели")
+         await message.answer(f"вы ничего не ввели нажмите еще раз отмена")
          await state.finish()
         
      
@@ -83,6 +83,7 @@ async def command_start(message: types.Message):
         await bot.send_message(message.from_user.id, text=text_view, reply_markup=markups.returt_main_menu)
         
         await DataInput.read.set()
+        
     elif message.text == "Заработать $":
         await get_job_money(message)
         #await bot.send_message(message.from_user.id, text = text2, reply_markup=markups.get_money_menu)
